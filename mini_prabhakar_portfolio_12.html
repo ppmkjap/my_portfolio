@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Prabhakar — Salesforce Business Systems Analyst</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1a3a5c;
+    --blue: #2563a8;
+    --light-blue: #e8f1fb;
+    --accent: #c8860a;
+    --accent-light: #fdf3e0;
+    --text: #1a1a2e;
+    --muted: #5a6478;
+    --border: #dde4ef;
+    --bg: #f8fafd;
+    --white: #ffffff;
+    --success: #1a6b3c;
+    --success-light: #e8f5ee;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(248,250,253,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--navy); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--blue); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 80px 2rem 4rem;
+    max-width: 1100px; margin: 0 auto;
+    gap: 4rem;
+  }
+  .hero-text { flex: 1; }
+  .hero-badge {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 20px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e8c87a;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    color: var(--navy);
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--blue); }
+  .hero-title {
+    font-size: 1.1rem; font-weight: 500; color: var(--blue);
+    margin-bottom: 1.5rem; letter-spacing: 0.02em;
+  }
+  .hero-desc { color: var(--muted); font-size: 1rem; max-width: 520px; margin-bottom: 2rem; line-height: 1.8; }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--navy); color: white;
+    padding: 12px 28px; border-radius: 6px;
+    text-decoration: none; font-weight: 500; font-size: 0.9rem;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--blue); transform: translateY(-1px); }
+  .btn-outline {
+    border: 1.5px solid var(--border); color: var(--navy);
+    padding: 12px 28px; border-radius: 6px;
+    text-decoration: none; font-weight: 500; font-size: 0.9rem;
+    transition: border-color 0.2s, transform 0.15s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-outline:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-1px); }
+  .hero-visual { flex: 0 0 320px; }
+  .profile-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(26,58,92,0.08);
+  }
+  .avatar {
+    width: 90px; height: 90px;
+    background: linear-gradient(135deg, var(--navy), var(--blue));
+    border-radius: 50%; margin: 0 auto 1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem; color: white; letter-spacing: -1px;
+  }
+  .profile-name { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--navy); margin-bottom: 4px; }
+  .profile-role { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.25rem; }
+  .cert-badges { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.25rem; }
+  .cert-badge {
+    background: var(--light-blue);
+    border: 1px solid #c0d5f0;
+    border-radius: 8px; padding: 8px 12px;
+    font-size: 0.72rem; font-weight: 600; color: var(--navy);
+    display: flex; align-items: center; gap: 8px;
+    white-space: nowrap; justify-content: center;
+  }
+  .cert-badge span { font-size: 14px; }
+  .stat-row { display: flex; justify-content: space-around; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .stat-item { text-align: center; }
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--navy); display: block; }
+  .stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* SECTIONS */
+  section { padding: 5rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--blue);
+    margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    color: var(--navy); margin-bottom: 1rem;
+  }
+  .section-subtitle { color: var(--muted); max-width: 600px; margin-bottom: 3rem; }
+
+  /* ABOUT */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  .about-text p { color: var(--muted); margin-bottom: 1rem; line-height: 1.85; }
+  .about-highlight {
+    background: var(--light-blue);
+    border-left: 3px solid var(--blue);
+    padding: 1rem 1.25rem; border-radius: 0 8px 8px 0;
+    font-style: italic; color: var(--navy); font-size: 0.95rem;
+    margin: 1.5rem 0;
+  }
+  .pivot-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem;
+  }
+  .pivot-card h3 { font-size: 1rem; font-weight: 600; color: var(--navy); margin-bottom: 1rem; }
+  .pivot-step { display: flex; gap: 1rem; margin-bottom: 1rem; align-items: flex-start; }
+  .pivot-dot {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--navy); color: white;
+    font-size: 0.75rem; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .pivot-step p { font-size: 0.875rem; color: var(--muted); margin: 0; }
+  .pivot-step strong { color: var(--text); display: block; font-weight: 500; }
+
+  /* SKILLS */
+  .skills-bg { background: var(--white); }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+  .skill-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+    display: flex; flex-direction: column;
+  }
+  .skill-card:hover { border-color: var(--blue); transform: translateY(-2px); }
+  .skill-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--light-blue); margin-bottom: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .skill-card h3 { font-size: 0.9rem; font-weight: 600; color: var(--navy); margin-bottom: 0.5rem; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.75rem; }
+  .skill-tag {
+    background: var(--light-blue); color: var(--navy);
+    font-size: 0.7rem; font-weight: 500;
+    padding: 3px 8px; border-radius: 4px;
+  }
+
+  /* PROJECTS */
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+  .project-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.75rem;
+    transition: box-shadow 0.2s, transform 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .project-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .project-card.blue::before { background: var(--blue); }
+  .project-card.navy::before { background: var(--navy); }
+  .project-card.accent::before { background: var(--accent); }
+  .project-card.success::before { background: var(--success); }
+  .project-card:hover { box-shadow: 0 8px 32px rgba(26,58,92,0.1); transform: translateY(-3px); }
+  .project-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .project-icon { font-size: 1.5rem; }
+  .project-years {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em;
+    color: var(--muted); text-transform: uppercase;
+    background: var(--bg); padding: 3px 8px; border-radius: 4px;
+  }
+  .project-card h3 { font-size: 1rem; font-weight: 600; color: var(--navy); margin-bottom: 0.5rem; }
+  .project-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+  .project-metrics { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .metric-pill {
+    background: var(--light-blue); color: var(--navy);
+    font-size: 0.7rem; font-weight: 600;
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .metric-pill.accent-pill { background: var(--accent-light); color: var(--accent); }
+  .metric-pill.success-pill { background: var(--success-light); color: var(--success); }
+
+  /* ACCOMPLISHMENTS */
+  .acc-bg { background: var(--navy); }
+  .acc-bg .section-label { color: #7aaee8; }
+  .acc-bg .section-title { color: white; }
+  .acc-bg .section-subtitle { color: rgba(255,255,255,0.6); }
+  .acc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
+  .acc-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px; padding: 1.5rem;
+    transition: background 0.2s;
+  }
+  .acc-card:hover { background: rgba(255,255,255,0.1); }
+  .acc-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem; color: rgba(255,255,255,0.25);
+    margin-bottom: 0.5rem; line-height: 1;
+  }
+  .acc-card p { font-size: 0.875rem; color: rgba(255,255,255,0.8); line-height: 1.7; }
+
+  /* EXPERIENCE */
+  .exp-timeline { position: relative; padding-left: 2rem; }
+  .exp-timeline::before {
+    content: ''; position: absolute; left: 7px; top: 8px; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .exp-item { position: relative; margin-bottom: 3rem; }
+  .exp-dot {
+    position: absolute; left: -2rem; top: 5px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--white); border: 2px solid var(--blue);
+  }
+  .exp-dot.current { background: var(--blue); }
+  .exp-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+  .exp-company { font-weight: 600; color: var(--navy); font-size: 1rem; }
+  .exp-role { color: var(--blue); font-size: 0.875rem; font-weight: 500; }
+  .exp-dates {
+    font-size: 0.75rem; font-weight: 500; color: var(--muted);
+    background: var(--bg); border: 1px solid var(--border);
+    padding: 3px 10px; border-radius: 20px; white-space: nowrap;
+  }
+  .exp-bullets { list-style: none; margin-top: 0.75rem; }
+  .exp-bullets li {
+    font-size: 0.875rem; color: var(--muted); padding: 4px 0 4px 1.25rem;
+    position: relative; line-height: 1.65;
+  }
+  .exp-bullets li::before {
+    content: ''; position: absolute; left: 0; top: 12px;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--blue);
+  }
+
+  /* CONTACT */
+  .contact-bg { background: var(--white); }
+  .contact-card {
+    background: var(--light-blue);
+    border: 1px solid #c0d5f0;
+    border-radius: 16px; padding: 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 2rem; flex-wrap: wrap;
+  }
+  .contact-card h2 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--navy); margin-bottom: 0.5rem; }
+  .contact-card p { color: var(--muted); max-width: 400px; }
+  .contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--navy);
+    font-size: 0.9rem; font-weight: 500;
+    background: var(--white); padding: 10px 18px;
+    border-radius: 8px; border: 1px solid var(--border);
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .contact-link:hover { border-color: var(--blue); color: var(--blue); transform: translateX(3px); }
+  .contact-link span { font-size: 16px; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 2rem;
+    font-size: 0.8rem; color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+
+  /* ANIMATIONS */
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .hero { flex-direction: column; padding-top: 100px; }
+    .hero-visual { width: 100%; }
+    .about-grid { grid-template-columns: 1fr; }
+    .contact-card { flex-direction: column; }
+    nav { padding: 0 1rem; }
+    .nav-links { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Mini Prabhakar</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero container">
+  <div class="hero-text fade-in">
+    <div class="hero-badge">&#9733; Open to new opportunities</div>
+    <h1>Mini<br><em>Prabhakar</em></h1>
+    <p class="hero-title">Salesforce Business Systems Analyst</p>
+    <p class="hero-desc">12+ years bridging business stakeholders and technical teams to deliver scalable Salesforce solutions. Former Senior BSA at Workday, supporting 3,500+ users across enterprise-wide programs.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">&#9993; Get in touch</a>
+      <a href="#projects" class="btn-outline">&#128269; View my work</a>
+    </div>
+  </div>
+  <div class="hero-visual fade-in">
+    <div class="profile-card">
+      <div class="avatar">MP</div>
+      <p class="profile-name">Mini Prabhakar</p>
+      <p class="profile-role">Open to new roles</p>
+      <div class="cert-badges">
+        <div class="cert-badge"><span>&#127885;</span> Salesforce Advanced Administrator</div>
+        <div class="cert-badge"><span>&#127885;</span> Salesforce Agentforce Specialist</div>
+        <div class="cert-badge"><span>&#127885;</span> Salesforce Platform App Builder</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-item">
+          <span class="stat-num">12+</span>
+          <span class="stat-label">Years</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">3,500+</span>
+          <span class="stat-label">Users</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">11,500+</span>
+          <span class="stat-label">Cases Touched</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <p class="section-label">About me</p>
+    <h2 class="section-title">From Operations to Salesforce —<br>a career built on curiosity</h2>
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <p>I started my career in Operations, where I developed a deep love for process, structure, strategizing and execution. But I wanted more — I wanted to solve problems, not just follow procedures. When a career coach introduced me to Salesforce, it was a perfect fit to my persona, and I loved the structure it offered while still allowing me to exercise my creativity in problem solving and troubleshooting.</p>
+        <p>Within 3 months I had my first Admin certification. That decision changed my life. Over the next 12 years — including eight at Workday — I grew from a case handler into a Senior Business Systems Analyst, owning programs that touched every corner of the organization. From being an everyday BSA, I became the subject matter expert within my group for SFDC Security/Access, Enterprise Territory Management/Sharing Models, New Offering Launches, SOX Compliance, and other Workday specific programs.</p>
+        <div class="about-highlight">"I became the go-to person for my entire team — not because I was assigned the role, but because I earned it over 8 years by never saying no and never leaving a problem half-solved. My manager recognized this early and formally appointed me as the mentor for every new hire — a role I took seriously every single time."</div>
+        <p>Today, I bring that same ownership mindset, documentation discipline, detail orientation, and cross-functional instinct to every team I work with. I also actively use AI tools including Claude and Gemini to accelerate my work. I enjoy learning new tools and technologies to continually push the boundaries of my knowledge and accelerate execution at my work.</p>
+      </div>
+      <div class="fade-in">
+        <div class="pivot-card">
+          <h3>Career journey</h3>
+          <div class="pivot-step">
+            <div class="pivot-dot">1</div>
+            <p><strong>Operations</strong>Process thinking, business knowledge, workflow expertise</p>
+          </div>
+          <div class="pivot-step">
+            <div class="pivot-dot">2</div>
+            <p><strong>Salesforce Admin Certification</strong>3 months. First cert. Life changed.</p>
+          </div>
+          <div class="pivot-step">
+            <div class="pivot-dot">3</div>
+            <p><strong>Workday — 8 years</strong>Case handler → Senior BSA → SOX Compliance Controller → Program Lead → Mentor → SME</p>
+          </div>
+          <div class="pivot-step">
+            <div class="pivot-dot">4</div>
+            <p><strong>Today — 4 Certifications</strong>Admin · Advanced Admin · Agentforce Specialist · Platform App Builder</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="skills-bg">
+  <div class="container">
+    <p class="section-label">Expertise</p>
+    <h2 class="section-title">Core competencies</h2>
+    <p class="section-subtitle">A blend of business analysis, Salesforce platform depth, and delivery discipline built over 12+ years.</p>
+    <div class="skills-grid">
+      <div class="skill-card fade-in">
+        <div class="skill-icon">&#128196;</div>
+        <h3>Business Analysis</h3>
+        <p style="font-size:0.85rem;color:var(--muted)">From discovery to sign-off — requirements gathering, BRDs, user stories, and process flows.</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Requirements Gathering</span>
+          <span class="skill-tag">BRD</span>
+          <span class="skill-tag">User Stories & ACs</span>
+          <span class="skill-tag">Process Flows</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">&#9729;</div>
+        <h3>Salesforce Platform</h3>
+        <p style="font-size:0.85rem;color:var(--muted)">Deep hands-on expertise across Sales Cloud, Service Cloud, and Agentforce.</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Sales Cloud</span>
+          <span class="skill-tag">Service Cloud</span>
+          <span class="skill-tag">Agentforce</span>
+          <span class="skill-tag">SFDC Config</span>
+          <span class="skill-tag">ETM</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">&#9989;</div>
+        <h3>Delivery & Testing</h3>
+        <p style="font-size:0.85rem;color:var(--muted)">End-to-end UAT planning, test case authoring, defect triage, and stakeholder sign-off.</p>
+        <div class="skill-tags">
+          <span class="skill-tag">UAT Planning</span>
+          <span class="skill-tag">Agile / JIRA</span>
+          <span class="skill-tag">Sprint Mgmt</span>
+          <span class="skill-tag">Sign-off</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">&#128274;</div>
+        <h3>Compliance & Governance</h3>
+        <p style="font-size:0.85rem;color:var(--muted)">SOX/ITGC implementation and ongoing compliance gatekeeping — zero audit findings.</p>
+        <div class="skill-tags">
+          <span class="skill-tag">SOX / ITGC</span>
+          <span class="skill-tag">Access Governance</span>
+          <span class="skill-tag">Quarterly UARs</span>
+          <span class="skill-tag">ServiceNow</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">&#128202;</div>
+        <h3>Reporting & Analytics</h3>
+        <p style="font-size:0.85rem;color:var(--muted)">Custom dashboards, automated reports, and data-driven visibility for leadership.</p>
+        <div class="skill-tags">
+          <span class="skill-tag">SFDC Dashboards</span>
+          <span class="skill-tag">SQL / SOQL</span>
+          <span class="skill-tag">Data Load</span>
+          <span class="skill-tag">SF Inspector</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">&#129504;</div>
+        <h3>AI-Native Working</h3>
+        <p style="font-size:0.85rem;color:var(--muted)">Active daily user of Claude and Gemini — generating code, analyzing data, and accelerating delivery.</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Claude</span>
+          <span class="skill-tag">Gemini</span>
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">Prompt Engineering</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">&#127891;</div>
+        <h3>Mentorship &amp; Team Development</h3>
+        <p style="font-size:0.85rem;color:var(--muted)">Formally appointed as new hire mentor by manager. Case Mentor guiding 7,500+ resolutions. Conducted training workshops on Sprint Management, SOX compliance, and case resolution.</p>
+        <div class="skill-tags">
+          <span class="skill-tag">New Hire Onboarding</span>
+          <span class="skill-tag">Case Mentoring</span>
+          <span class="skill-tag">Training Workshops</span>
+          <span class="skill-tag">Knowledge Transfer</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <p class="section-label">Key projects</p>
+    <h2 class="section-title">Programs I have led &amp; owned</h2>
+    <p class="section-subtitle">Real initiatives, real numbers, real impact — delivered consistently over 8 years at Workday.</p>
+    <div class="projects-grid">
+      <div class="project-card blue fade-in">
+        <div class="project-meta">
+          <span class="project-icon">&#127942;</span>
+          <span class="project-years">6 consecutive years</span>
+        </div>
+        <h3>Fiscal Year Territory Transition</h3>
+        <p>Annual org-wide Salesforce territory reconfiguration for 3,500+ users. Led a 7-person team, bridged timezone gaps with off-shore dev team, and personally reviewed 60 JIRAs. Hard Feb 1 go-live — zero defects, every year without exception.</p>
+        <div class="project-metrics">
+          <span class="metric-pill">3,500+ users</span>
+          <span class="metric-pill">7-person team</span>
+          <span class="metric-pill success-pill">Zero defects</span>
+        </div>
+      </div>
+      <div class="project-card navy fade-in">
+        <div class="project-meta">
+          <span class="project-icon">&#128274;</span>
+          <span class="project-years">SOX Implementation</span>
+        </div>
+        <h3>ITGC Case Management System</h3>
+        <p>Designed and built a Salesforce ITGC case system for SOX compliance — 3-tier VP approval routing, power user execution workflows, and a bulk-record email workaround. Proactively resolved an absent-approver bottleneck risk during solutioning.</p>
+        <div class="project-metrics">
+          <span class="metric-pill">3-tier approval</span>
+          <span class="metric-pill success-pill">Zero audit findings</span>
+          <span class="metric-pill">Full audit trail</span>
+        </div>
+      </div>
+      <div class="project-card accent fade-in">
+        <div class="project-meta">
+          <span class="project-icon">&#128202;</span>
+          <span class="project-years">Case Governance</span>
+        </div>
+        <h3>15-Report Case Metrics Dashboard</h3>
+        <p>Built a 15-report Salesforce dashboard providing 360-degree case lifecycle visibility for a 17-member team handling 350–400 cases monthly. Configured automated weekly accountability reports. Still actively used by leadership today.</p>
+        <div class="project-metrics">
+          <span class="metric-pill">15 reports</span>
+          <span class="metric-pill">17-member team</span>
+          <span class="metric-pill accent-pill">Still in use today</span>
+        </div>
+      </div>
+      <div class="project-card success fade-in">
+        <div class="project-meta">
+          <span class="project-icon">&#9889;</span>
+          <span class="project-years">Sprint Management</span>
+        </div>
+        <h3>Agile Sprint Program</h3>
+        <p>Built a structured H/M/L prioritization framework for a 60-story-point bi-weekly sprint cycle. Introduced a private swap-based process for last-minute additions. Pre-reviewed all acceptance criteria before every refinement session.</p>
+        <div class="project-metrics">
+          <span class="metric-pill">60 story points</span>
+          <span class="metric-pill">2-week cycles</span>
+          <span class="metric-pill success-pill">H/M/L framework</span>
+        </div>
+      </div>
+      <div class="project-card blue fade-in">
+        <div class="project-meta">
+          <span class="project-icon">&#128218;</span>
+          <span class="project-years">Knowledge Management</span>
+        </div>
+        <h3>Confluence Knowledge Repository</h3>
+        <p>Founded the team's Confluence knowledge base before being officially asked — documenting every core process including incidents, RITMs, JIRAs, acceptance criteria, and case resolution. Enabled new joiners to onboard independently.</p>
+        <div class="project-metrics">
+          <span class="metric-pill">24-person team</span>
+          <span class="metric-pill">Self-service onboarding</span>
+          <span class="metric-pill success-pill">Still in use</span>
+        </div>
+      </div>
+      <div class="project-card navy fade-in">
+        <div class="project-meta">
+          <span class="project-icon">&#128737;</span>
+          <span class="project-years">Daily Program</span>
+        </div>
+        <h3>SOX Compliance Gatekeeping</h3>
+        <p>Served as daily SOX compliance gatekeeper — reviewing 20–30 Salesforce access requests daily for 3,500+ users. Coached team members on compliant alternatives. Facilitated quarterly User Access Reviews. Zero audit findings across all cycles.</p>
+        <div class="project-metrics">
+          <span class="metric-pill">20-30 reviews/day</span>
+          <span class="metric-pill">Quarterly UARs</span>
+          <span class="metric-pill success-pill">Zero findings</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCOMPLISHMENTS -->
+<section class="acc-bg">
+  <div class="container">
+    <p class="section-label">Impact</p>
+    <h2 class="section-title">By the numbers</h2>
+    <p class="section-subtitle">Specific, measurable outcomes from 8 years at Workday.</p>
+    <div class="acc-grid">
+      <div class="acc-card fade-in">
+        <div class="acc-num">01</div>
+        <p>Delivered the Fiscal Year Territory Transition for 6 consecutive years — zero defects, zero missed deadlines, every year without exception.</p>
+      </div>
+      <div class="acc-card fade-in">
+        <div class="acc-num">02</div>
+        <p>Directly resolved approximately 4,000 service cases personally. As Case Mentor, reviewed, analyzed, and guided an additional 7,500+ cases for team members — touching over 11,500 cases in total across a 17-member team.</p>
+      </div>
+      <div class="acc-card fade-in">
+        <div class="acc-num">03</div>
+        <p>Achieved zero SOX/ITGC audit findings across all quarterly UAR cycles — maintaining compliance for 3,500+ users every single cycle.</p>
+      </div>
+      <div class="acc-card fade-in">
+        <div class="acc-num">04</div>
+        <p>Built a 15-report Salesforce dashboard still actively used by leadership today — delivering 360-degree case lifecycle visibility and automated accountability.</p>
+      </div>
+      <div class="acc-card fade-in">
+        <div class="acc-num">05</div>
+        <p>Eliminated a multi-year cross-functional dependency blocker by escalating to leadership — protecting the project timeline for the first time in project history.</p>
+      </div>
+      <div class="acc-card fade-in">
+        <div class="acc-num">06</div>
+        <p>Recently generated and successfully executed Python scripts and SOQL queries using AI tools — demonstrating hands-on comfort in an AI-native working environment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <p class="section-label">Work history</p>
+    <h2 class="section-title">Experience</h2>
+    <p class="section-subtitle">A consistent track record of growth, ownership, and impact across four organizations.</p>
+    <div class="exp-timeline">
+      <div class="exp-item fade-in">
+        <div class="exp-dot current"></div>
+        <div class="exp-header">
+          <div>
+            <p class="exp-company">Workday Inc. &nbsp;&#183;&nbsp; San Francisco, CA</p>
+            <p class="exp-role">Sr. Business Systems Analyst</p>
+          </div>
+          <span class="exp-dates">2018 – 2026</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>Led end-to-end requirements gathering, BRD development, and cross-functional stakeholder coordination for enterprise Salesforce programs.</li>
+          <li>Owned the annual Fiscal Year Territory Transition for 6 consecutive years — delivering zero defects on a hard Feb 1 go-live, every year.</li>
+          <li>Designed and implemented a Salesforce ITGC case management system for SOX compliance with 3-tier VP approval routing and power user workflows.</li>
+          <li>Built a 15-report Case Metrics Dashboard still in active leadership use today, and managed bi-weekly Agile sprints with a 60-story-point capacity.</li>
+          <li>Served as SOX Compliance Controller (20–30 daily access reviews), Case Mentor guiding 7,500+ team case resolutions, new hire mentor, and Confluence knowledge base founder.</li>
+        </ul>
+      </div>
+      <div class="exp-item fade-in">
+        <div class="exp-dot"></div>
+        <div class="exp-header">
+          <div>
+            <p class="exp-company">Power Communication Corp. &nbsp;&#183;&nbsp; San Francisco, CA</p>
+            <p class="exp-role">SFDC Administrator</p>
+          </div>
+          <span class="exp-dates">2015 – 2018</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>Developed a comprehensive Training Management App on Salesforce covering scheduling, logistics, skills inventory, and campaigns.</li>
+          <li>Configured custom objects, page layouts, profiles, permission sets, and automated workflows.</li>
+        </ul>
+      </div>
+      <div class="exp-item fade-in">
+        <div class="exp-dot"></div>
+        <div class="exp-header">
+          <div>
+            <p class="exp-company">Stratitude Inc. &nbsp;&#183;&nbsp; San Francisco, CA</p>
+            <p class="exp-role">SFDC Consultant</p>
+          </div>
+          <span class="exp-dates">2014 – 2015</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>Maintained Sales Cloud and custom AppExchange products including ZEN and AJILE.</li>
+          <li>Configured Salesforce-to-Salesforce integrations and developed reports and dashboards.</li>
+        </ul>
+      </div>
+      <div class="exp-item fade-in">
+        <div class="exp-dot"></div>
+        <div class="exp-header">
+          <div>
+            <p class="exp-company">Ortanique &nbsp;&#183;&nbsp; San Francisco, CA</p>
+            <p class="exp-role">Salesforce System Administrator</p>
+          </div>
+          <span class="exp-dates">2012 – 2014</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>Designed SFDC application for lead management, sales pipeline tracking, and order processing.</li>
+          <li>Configured security models, validation rules, workflows, approval processes, and AppExchange solutions.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-bg">
+  <div class="container">
+    <p class="section-label">Get in touch</p>
+    <h2 class="section-title">Let's connect</h2>
+    <div class="contact-card fade-in">
+      <div>
+        <h2>Open to new opportunities</h2>
+        <p>I am actively looking for a Salesforce Business Systems Analyst or Administrator role where I can bring 12+ years of platform expertise, program ownership, and genuine care for getting things right.</p>
+      </div>
+      <div class="contact-links">
+        <div class="contact-link" style="cursor:default;"><span>&#9993;</span> mini001 [at] gmail [dot] com</div>
+        <a href="https://www.linkedin.com/in/miniprabhakar/" target="_blank" class="contact-link"><span>&#128279;</span> linkedin.com/in/miniprabhakar</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&#169; 2026 Mini Prabhakar &nbsp;&#183;&nbsp; Salesforce Business Systems Analyst &nbsp;&#183;&nbsp; </p>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
